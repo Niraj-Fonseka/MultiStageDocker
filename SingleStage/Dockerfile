@@ -1,7 +1,7 @@
 FROM golang:1.11.0-stretch 
 
-COPY . $GOPATH/src/MultiStageDocker/SingleStage
-WORKDIR $GOPATH/src/MultiStageDocker/SingleStage
+COPY . /SingleStage
+WORKDIR /SingleStage
 
 ENV GO111MODULE=on
 
