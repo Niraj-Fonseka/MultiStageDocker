@@ -1,23 +1,18 @@
 #first stage - builder
 FROM golang:1.11.0-stretch as builder
-
-COPY . /MultiStage
-WORKDIR /MultiStage
-
+COPY . /LoadLocation
+WORKDIR /LoadLocation
 ENV GO111MODULE=on
+RUN CGO_ENABLED=0 GOOS=linux go build -o LoadLocation
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o MultiStage 
 
-
-#second stage 
+#second stage
 FROM alpine:latest
+WORKDIR /root/
 
 RUN apk add --no-cache tzdata
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-WORKDIR /root/
-
-COPY --from=builder /MultiStage .
-
-CMD ["./MultiStage"]
+COPY --from=builder /LoadLocation .
+CMD ["./LoadLocation"]
